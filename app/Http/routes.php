@@ -11,19 +11,16 @@
 |
 */
 
-Route::get('/', function () {
-    //abort(401);
-	return "yuo found liftbot" . PHP_EOL;
-});
+call_user_func(function(){
 
-Route::post('/',function(){
-	//return 'hello liftbot is here' .PHP_EOL;
-});
+	$apiBase = 'api/v1';
 
-Route::any('lift/{movement}/{weight}/{units}',function($mvmt,$weight,$units){
-	return "your ${mvmt}ed $weight $units" . PHP_EOL;
-});
+	Route::get('/', function () {
+	    //abort(401);
+		return "yuo found liftbot" . PHP_EOL;
+	});
 
-Route::any('lift/{whatever}',function($mvmt,$whatever){
-	return "lifted $whatever" . PHP_EOL;
+	Route::post("$apiBase/slack",function(){
+		return 'hello liftbot is here' .PHP_EOL;
+	});
 });
