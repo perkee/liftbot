@@ -12,5 +12,10 @@
 */
 
 Route::get('/', function () {
-    abort(401);
+    //abort(401);
+	return "yuo found liftbot" . PHP_EOL;
+});
+
+Route::post('/',function(){
+	return 'hello liftbot is here' .PHP_EOL;
 });
