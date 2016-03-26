@@ -44,6 +44,7 @@ class CreateUsersTable extends Migration
             $table->integer('user_id')->unsigned();
             $table->integer('movement_id')->unsigned();
             $table->integer('grams')->unsigned();
+            $table->integer('bodygrams')->unsigned();
 
             $table->timestamps();
 

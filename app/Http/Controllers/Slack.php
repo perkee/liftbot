@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Team;
 use App\User;
+use App\Movement;
+use App\Lift;
 
 class Slack extends Controller
 {
@@ -44,6 +46,18 @@ class Slack extends Controller
                     }
                     break;
                 
+                case 'lift':
+                    //$movement = Movement::firstOrCreate(['name' => $request->input('openingWord')] );
+                    $movement = Movement::fromName($request->input('openingWord'));
+                    $lift = new Lift([
+                        'user_id'     => $user->id,
+                        'movement_id' => $movement->id,
+                        'grams'       => 420,
+                        'bodygrams'   => 69,
+                    ]);
+                    $lift->save();
+                    $response = "$user->slack_name has a new $movement->name of $lift->grams at $lift->bodygrams";
+                    break;
                 default:
                     # code...
                     break;
