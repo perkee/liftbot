@@ -15,12 +15,8 @@ call_user_func(function(){
 
 	$apiBase = 'api/v1';
 
-	Route::get('/', function () {
-	    //abort(401);
-		return "yuo found liftbot" . PHP_EOL;
+	Route::group(['middleware' => 'slack'],function() use ($apiBase){
+		Route::post("$apiBase/slack",'Slack@handle');
 	});
 
-	Route::post("$apiBase/slack",function(){
-		return 'hello liftbot is here' .PHP_EOL;
-	});
 });

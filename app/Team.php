@@ -2,9 +2,9 @@
 
 namespace App;
 
-use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Database\Eloquent\Model;
 
-class User extends Authenticatable
+class Team extends Model
 {
     /**
      * The attributes that are mass assignable.
@@ -13,8 +13,6 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'slack_id',
-        'slack_name',
-        'team_id',
-        'sex'
+        'slack_domain'
     ];
 }

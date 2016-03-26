@@ -17,12 +17,27 @@ class RouteFromSlackText
     {
         //die(json_encode($request->all()));
         $input = $request->all();
+        $input['argc'] = 0;
+        $text = '';
         if(isset( $input['text'] )){
-            $text = $input['text'];
-            //command comes in like "<command> <variable arguments needing changes>";
-            //so let's separate out the command for starters;
+            $text = trim($input['text']);
+        }
+        else{
+            throw new Exception;
+        }
+        if('' != $text){
             $text = explode(' ',$text,2);
-            if(2 == count($text)){
+            if(0 === count($text) || '' === $text[0]){
+                $input['argc'] = 0;
+            }
+            if(1 === count($text)){
+                //command with no arguments means that we have a "read only" command
+                $input['argc'] = 1;
+            }
+            elseif(2 === count($text)){
+                //command comes in like "<command> <variable arguments needing changes>";
+                //so let's separate out the command for starters;
+                $input['argc'] = 2;
                 $command = $text[0];
                 $args = $text[1];
 
@@ -48,8 +63,8 @@ class RouteFromSlackText
                 $input['filtered'] = $filtered;
 
             }
-            $request->replace($input);
         }
+        $request->replace($input);
 
         return $next($request);
     }
