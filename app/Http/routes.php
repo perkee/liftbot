@@ -17,5 +17,13 @@ Route::get('/', function () {
 });
 
 Route::post('/',function(){
-	return 'hello liftbot is here' .PHP_EOL;
+	//return 'hello liftbot is here' .PHP_EOL;
+});
+
+Route::any('lift/{movement}/{weight}/{units}',function($mvmt,$weight,$units){
+	return "your ${mvmt}ed $weight $units" . PHP_EOL;
+});
+
+Route::any('lift/{whatever}',function($mvmt,$whatever){
+	return "lifted $whatever" . PHP_EOL;
 });
