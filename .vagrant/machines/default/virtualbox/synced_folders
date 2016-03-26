@@ -1,0 +1,1 @@
+{"virtualbox":{"/home/vagrant/lift":{"type":null,"mount_options":[],"guestpath":"/home/vagrant/lift","hostpath":"/Users/perkee/Sites/lift","disabled":false,"__vagrantfile":true},"/vagrant":{"guestpath":"/vagrant","hostpath":"/Users/perkee/Sites/lift","disabled":false,"__vagrantfile":true}}}
