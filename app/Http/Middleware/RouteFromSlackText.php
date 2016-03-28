@@ -50,12 +50,24 @@ class RouteFromSlackText
                 //drop the first word from the args;
                 $filtered = preg_replace('/^[^\d]*(\d)/','$1', $args);
 
-                //collapse spaces between digits and units 
-                $filtered = preg_replace('/(@*) *(\d+) *(kg|lb|#)/', '$1$2$3', $filtered);
-                
-                //weights and bodyweights ought to be separated by slashes
-                $filtered = str_replace(' ', $delim, $filtered);
+                //collapse spaces between digits and units and delimit distinct quantities
+                $filtered = preg_replace('/\s*(@*)\s*(\d+)\s*(kg|lb|#)?\s*/', $delim. '$1$2$3', $filtered);
 
+                //if filtered input looks like a lifted weight at a bodyweight,
+                //prepare that data for the controller
+
+                if(preg_match("/(${delim}@?\d+(kg|lb|#))+/", $filtered)){
+                    // make into an array
+                    $weights = explode($delim, $filtered);
+                    foreach ($weights as $weight) {
+                        if(!$weight) continue; //skip empty between delimiters
+                        $key = $this->isBodyWeight($weight) ? 'bodygrams' : 'grams';
+                        $grams = $this->weightStringToGrams($weight);
+                        $input[$key] = $grams;
+                    }
+                }
+
+                $filtered = substr($filtered, 1);
 
                 $input['openingWord'] = $openingWord;
                 $input['args'] = $args;
@@ -67,5 +79,50 @@ class RouteFromSlackText
         $request->replace($input);
 
         return $next($request);
+    }
+
+    private function weightStringToGrams(String $weightString, String $unitGuess = 'lb'){
+        $matches = [];
+        $units = $unitGuess;
+        $value = 0;
+        preg_match('/(\d+)(\w+)$/',$weightString, $matches);
+        switch (count($matches)) {
+            case 3:
+                $units = $matches[2];
+                //intentionally fall through
+            case 2:
+                $value = $matches[1];
+                break;
+            default:
+                return 0;
+                break;
+        }
+        switch ($units) {
+            case 'k':
+            case 'kg':
+                return $this->kgToGrams($value);
+                break;
+
+            case 'l':
+            case '#':
+            case 'lb':
+                return $this->lbToGrams($value);
+            
+            default:
+                return 0;
+                break;
+        }
+    }
+
+    private function isBodyWeight(String $weightString){
+        return 0 === strncmp($weightString, '@', 1);
+    }
+
+    private function kgToGrams($kg){
+        return 1000 * $kg;
+    }
+
+    private function lbToGrams($lb){
+        return $lb * 453.593;
     }
 }

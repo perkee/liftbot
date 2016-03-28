@@ -51,11 +51,11 @@ class Slack extends Controller
                     $lift = new Lift([
                         'user_id'     => $user->id,
                         'movement_id' => $movement->id,
-                        'grams'       => 420,
-                        'bodygrams'   => 69,
+                        'grams'       => $request->input('grams'),
+                        'bodygrams'   => $request->input('bodygrams'),
                     ]);
                     $lift->save();
-                    $response = "$user->slack_name has a new $movement->name of $lift->grams at $lift->bodygrams";
+                    $response['nice'] = "$user->slack_name has a new $movement->name of $lift->grams at $lift->bodygrams";
                     break;
                 default:
                     # code...
