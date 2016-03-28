@@ -47,7 +47,6 @@ class Slack extends Controller
                     break;
                 
                 case 'lift':
-                    //$movement = Movement::firstOrCreate(['name' => $request->input('openingWord')] );
                     $movement = Movement::fromName($request->input('openingWord'));
                     $lift = new Lift([
                         'user_id'     => $user->id,
