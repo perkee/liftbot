@@ -13,21 +13,9 @@ use App\Lift;
 class Slack extends Controller
 {
     public function handle(Request $request){
-        //TODO: move all of this into middleware that also validates input.
-        $team = Team::firstOrNew([
-            'slack_id' => $request->input('team_id')
-        ]);
-        $team->slack_domain = $request->input('team_domain');
-        $team->save();
+        $user = $request->user;
+        $team = $request->team;
 
-        $user = User::firstOrNew([
-            'team_id'  => $team->id,
-            'slack_id' => $request->input('user_id')
-        ]);
-
-        $user->slack_name = $request->input('user_name');
-
-        $user->save();
         $argc = $request->input('argc');
         $response = [
             'input' => $request->all()
