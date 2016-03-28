@@ -41,7 +41,7 @@ class Movement extends Model
     static function makeHash($name){
         
         $hash = strtolower(trim($name));
-        $hash = preg_replace('/[^a-z]/', '', $name);
+        $hash = preg_replace('/[^a-z]/', '', $hash);
         return $hash;
     }
 }
