@@ -27,4 +27,14 @@ class User extends Authenticatable
         }
         parent::__construct($attributes);
     }
+
+    public function team()
+    {
+        return $this->belongsTo('App\Team');
+    }
+
+    public function lifts()
+    {
+        return $this->hasMany('App\Lift');
+    }
 }

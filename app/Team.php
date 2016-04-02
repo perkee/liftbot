@@ -15,4 +15,9 @@ class Team extends Model
         'slack_id',
         'slack_domain'
     ];
+
+    public function users()
+    {
+    	return $this->hasMany('App\User');
+    }
 }

@@ -17,4 +17,20 @@ class Lift extends Model
         'grams',
         'bodygrams'
     ];
+
+    /**
+     * Get the user who performed this lift
+     */
+    public function user()
+    {
+        return $this->belongsTo('App\User');
+    }
+
+    /**
+     * Get the Movement of which this lift is an instance
+     */
+    public function movement()
+    {
+        return $this->belongsTo('App\Movement');
+    }
 }

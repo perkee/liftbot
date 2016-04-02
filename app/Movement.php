@@ -48,4 +48,10 @@ class Movement extends Model
         $hash = preg_replace('/[^a-z]/', '', $hash);
         return $hash;
     }
+
+    
+    public function lifts()
+    {
+        return $this->hasMany('App\Lift');
+    }
 }
