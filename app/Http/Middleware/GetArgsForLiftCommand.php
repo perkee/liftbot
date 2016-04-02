@@ -28,8 +28,9 @@ class GetArgsForLiftCommand
             $matches = [];
             //patterns we need to use twice to get values then remove from input
             $regex = (object)[
-                'reps' => '/[x*]\s*\d+/i',
-                'weight' => '/\s*(@?)\s*(\d+)\s*(kg?|lb?|#)?\s*/'
+                'reps'   => '/[x*]\s*\d+/i',
+                'weight' => '/(?<![\w.\/])\s*(@?)\s*(\d+)\s*(kg?|lb?|#)?\s*/',
+                'url'    => '/https?:\/\/[-.a-zA-Z\/\d?=_]+/'
             ];
             //get number of reps
             $reps = 1;
@@ -68,6 +69,16 @@ class GetArgsForLiftCommand
                         $input['grams'] = $grams;
                     }
                 }
+            }
+
+            //drop weights
+            //$text = preg_replace($regex->weight, '', $text);
+
+            //get URL
+            preg_match($regex->url, $text, $matches);
+            if(count($matches) > 0){
+                $input['url'] = $matches[0];
+                $text = preg_replace($regex->url,'', $text);
             }
 
             $input['movementName'] = $movementName;

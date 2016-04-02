@@ -47,6 +47,7 @@ class CreateUsersTable extends Migration
             $table->integer('grams')->unsigned();
             $table->integer('bodygrams')->unsigned();
             $table->integer('reps')->unsigned();
+            $table->string('url');
 
             $table->timestamps();
 

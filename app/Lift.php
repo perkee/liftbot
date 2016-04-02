@@ -15,7 +15,8 @@ class Lift extends Model
         'user_id',
         'movement_id',
         'grams',
-        'bodygrams'
+        'bodygrams',
+        'url'
     ];
 
     /**
