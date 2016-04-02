@@ -18,6 +18,7 @@ class Slack extends Controller
 
         $argc = $request->input('argc');
         $response = [
+            'req'   => $request,
             'input' => $request->all()
         ];
         if($command = $request->input('command')){
@@ -29,24 +30,34 @@ class Slack extends Controller
                         if('m' === $sex || 'f' === $sex){
                             $user->sex = $sex;
                             $user->save();
-                            $response = "Sex for $user->slack_name is now $user->sex.";
+                            $response['nice'] = "Sex for $user->slack_name is now $user->sex.";
                         }
                     }
                     break;
                 
                 case 'lift':
-                    $movement = Movement::fromName($request->input('openingWord'));
+                    $movement = \App\Movement::firstOrCreateFromName($request->input('movementName'));
                     $lift = new Lift([
                         'user_id'     => $user->id,
                         'movement_id' => $movement->id,
                         'grams'       => $request->input('grams'),
-                        'bodygrams'   => $request->input('bodygrams'),
+                        'bodygrams'   => $request->input('bodyGrams'),
                     ]);
                     $lift->save();
+                    $response['movement'] = $movement;
+                    $response['lift'] = $lift;
                     $response['nice'] = "$user->slack_name has a new $movement->name of $lift->grams at $lift->bodygrams";
                     break;
+
+                case 'stats':
+                    $args = explode(' ',$request->input('args'),2);
+                    $query_user_slack_name = $args[0];
+                    $movement_name = $args[1];
+                    $movement = \App\Movement::whereName($movement_name);
+                    $query_user = null;
+                    $lift = \App\Lift::where('movement_id',$movement);
                 default:
-                    # code...
+                    $response['nice'] = "Unknown command: $command";
                     break;
             }
         }

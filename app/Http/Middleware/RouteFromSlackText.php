@@ -60,7 +60,7 @@ class RouteFromSlackText
                     // make into an array
                     $weights = explode($delim, $filtered);
                     foreach ($weights as $weight) {
-                        if(!$weight) continue; //skip empty between delimiters
+                        if(!$weight) continue; //skip empty between delimitersd
                         $key = $this->isBodyWeight($weight) ? 'bodygrams' : 'grams';
                         $grams = $this->weightStringToGrams($weight);
                         $input[$key] = $grams;

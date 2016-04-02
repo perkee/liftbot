@@ -25,7 +25,8 @@ class CreateUsersTable extends Migration
             $table->integer('team_id')->unsigned();
             $table->string('slack_id')->unique();
             $table->string('slack_name');
-            $table->string('sex',1);
+            $table->string('sex',1);//m or f
+            $table->string('units',1);// k or l (ell) meaning kilograms or pounds
             $table->timestamps();
 
             $table->foreign('team_id')->references('id')->on('teams');
@@ -45,6 +46,7 @@ class CreateUsersTable extends Migration
             $table->integer('movement_id')->unsigned();
             $table->integer('grams')->unsigned();
             $table->integer('bodygrams')->unsigned();
+            $table->integer('reps')->unsigned();
 
             $table->timestamps();
 

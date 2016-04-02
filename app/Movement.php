@@ -18,7 +18,7 @@ class Movement extends Model
         //'hash'
     ];
 
-    public static function fromName($name){
+    public static function firstOrCreateFromName($name){
         $hash = self::makeHash($name);
         $movement = self::where('hash', $hash);
         if( 0 === $movement->count() ){
@@ -31,6 +31,10 @@ class Movement extends Model
             $movement = $movement->first();
         }
         return $movement;
+    }
+
+    public static function whereName($name){
+        return self::where('hash',self::makeHash($name))->firstOrFail();
     }
 
     public function setNameAttribute($val){

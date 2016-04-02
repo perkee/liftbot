@@ -36,8 +36,10 @@ class Kernel extends HttpKernel
 
         'slack' => [
             \App\Http\Middleware\VerifySlackAuthToken::class,
-            \App\Http\Middleware\RouteFromSlackText::class,
-            \App\Http\Middleware\SlackTeamUser::class
+            \App\Http\Middleware\SlackTeamUser::class,
+            \App\Http\Middleware\GetCommandFromSlack::class,
+            \App\Http\Middleware\GetArgsForLiftCommand::class,
+            //\App\Http\Middleware\RouteFromSlackText::class,
         ]
     ];
 

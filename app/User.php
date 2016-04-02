@@ -15,6 +15,16 @@ class User extends Authenticatable
         'slack_id',
         'slack_name',
         'team_id',
-        'sex'
+        'sex',
+        'units'
     ];
+
+    public function __construct(array $attributes = [])
+    {
+        if(!isset($attributes['units']) || 0 == strlen($attributes['units'])){
+            //dfault units for a user are pounds
+            $attributes['units'] = 'l';
+        }
+        parent::__construct($attributes);
+    }
 }
