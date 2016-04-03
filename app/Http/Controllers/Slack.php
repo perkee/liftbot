@@ -44,7 +44,8 @@ class Slack extends Controller
                         'movement_id' => $movement->id,
                         'grams'       => $request->input('grams'),
                         'bodygrams'   => $request->input('bodyGrams'),
-                        'url'         => $request->input('url')
+                        'url'         => $request->input('url'),
+                        'reps'        => $request->input('reps')
                     ]);
                     $lift->save();
                     $response['movement'] = $movement;
