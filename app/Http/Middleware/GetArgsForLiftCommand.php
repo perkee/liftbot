@@ -20,7 +20,7 @@ class GetArgsForLiftCommand
         if(isset($input['text']) && isset($input['command']) && 'lift' == $input['command']){
             $text = $input['text'];
             if(!$text){
-                die('Lift needs a movement and wieght at least');
+                die('Lift needs a movement and weight at least');
             }
             Log::debug('Lift Command');
             //full string looks like /perk lift <movement name> <Weight>
@@ -84,11 +84,25 @@ class GetArgsForLiftCommand
             $input['movementName'] = $movementName;
             $input['reps'] = $reps;
             $input['text'] = $text;
-
-            $request->replace($input);
+            if($this->isValid($input)){
+                $request->replace($input);
+            }
+            else{
+                $keys = array_keys($input);
+                $keys = implode(', ', $keys);
+                die ("Invalid lift command, you provided these so what's missing?\n$keys");
+            }
 
         }
         return $next($request);
+    }
+
+    protected function isValid($input = []){
+        return isset(
+            $input['movementName'],
+            $input['reps'],
+            $input['grams']
+        );
     }
 
     protected function toGrams($magnitude = 0, $units = '', $fallBackUnits = 'l'){
