@@ -28,8 +28,9 @@ class Slack extends Controller
                 case 'prs':
                     return $this->handlePrs($request);
                 case 'sex':
-                    if($sex = $request->input('args')){
+                    if($sex = $request->input('text')){
                         $sex = mb_substr($sex, 0, 1);
+                        $sex = strtolower($sex);
                         if('m' === $sex || 'f' === $sex){
                             $user->sex = $sex;
                             $user->save();
