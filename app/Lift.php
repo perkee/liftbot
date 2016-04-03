@@ -35,4 +35,38 @@ class Lift extends Model
     {
         return $this->belongsTo('App\Movement');
     }
+
+    public function __toString()
+    {
+        $units = isset($this->units) ? $this->units : 'l';
+        return $this->movement->name . ': ' . $this->convert($units) . " × $this->reps";
+    }
+
+    public function convert($units = '', $fallBackUnits = 'l')
+    {
+        $units = ''.$units.$fallBackUnits;
+        switch (substr($units, 0, 1)) {
+            case 'l': //intentional fallthrough for synonyms
+            case '#':
+                return $this->lb().' lb';
+            case 'k':
+                return $this->kg().' kg';
+            default:
+                return false;
+                break;
+        }
+    }
+
+    private function floatToString($float){
+        return sprintf('%.1f',$float);
+    }
+
+
+    public function kg(){
+        return $this->floatToString($this->grams / 1000);
+    }
+
+    public function lb(){
+        return $this->floatToString($this->grams / 453.593);
+    }
 }
