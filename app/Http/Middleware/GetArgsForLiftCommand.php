@@ -22,7 +22,6 @@ class GetArgsForLiftCommand
             if(!$text){
                 die('Lift needs a movement and weight at least');
             }
-            Log::debug('Lift Command');
             //full string looks like /perk lift <movement name> <Weight>
             //reusable array for running preg_match
             $matches = [];
