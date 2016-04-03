@@ -12,6 +12,7 @@ use App\Lift;
 
 class Slack extends Controller
 {
+    private $debug = false;
     public function handle(Request $request){
         $user = $request->user;
         $team = $request->team;
@@ -66,9 +67,15 @@ class Slack extends Controller
             }
         }
         if(is_array($response)){
-            $response['team'] = $team;
-            $response['user'] = $user;
-            return json_encode($response,JSON_PRETTY_PRINT);
+            if($this->debug){
+                $response['team'] = $team;
+                $response['user'] = $user;
+
+                return json_encode($response,JSON_PRETTY_PRINT); 
+            }
+            else{
+                return $response['nice'];
+            }
         }
         return $response . PHP_EOL;
         
