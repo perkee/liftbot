@@ -39,18 +39,22 @@ class Lift extends Model
     public function __toString()
     {
         $units = isset($this->units) ? $this->units : 'l';
-        return $this->movement->name . ': ' . $this->convert($units) . " × $this->reps";
+        $grams = $this->convert($this->grams, $units);
+        $name = $this->movement->name;
+        $reps = "× $this->reps";
+        $bodygrams = isset($this->bodygrams) ? '@ ' . $this->convert($this->bodygrams, $units) : '';
+        return "$name: $grams $reps $bodygrams";
     }
 
-    public function convert($units = '', $fallBackUnits = 'l')
+    public function convert($grams, $units = '', $fallBackUnits = 'l')
     {
         $units = ''.$units.$fallBackUnits;
         switch (substr($units, 0, 1)) {
             case 'l': //intentional fallthrough for synonyms
             case '#':
-                return $this->lb().' lb';
+                return $this->lb($grams).' lb';
             case 'k':
-                return $this->kg().' kg';
+                return $this->kg($grams).' kg';
             default:
                 return false;
                 break;
@@ -62,11 +66,11 @@ class Lift extends Model
     }
 
 
-    public function kg(){
-        return $this->floatToString($this->grams / 1000);
+    public function kg($grams){
+        return $this->floatToString($grams / 1000);
     }
 
-    public function lb(){
-        return $this->floatToString($this->grams / 453.593);
+    public function lb($grams){
+        return $this->floatToString($grams / 453.593);
     }
 }
