@@ -59,9 +59,10 @@ class Slack extends Controller
                         'reps'        => $request->input('reps')
                     ]);
                     $lift->save();
+                    $lift->units = $user->units;
                     $response['movement'] = $movement;
                     $response['lift'] = $lift;
-                    $response['nice'] = "$user->slack_name has a new $movement->name of $lift->grams at $lift->bodygrams";
+                    $response['nice'] = "$user->slack_name has a new $lift";
                     break;
 
                 case 'stats':
