@@ -40,12 +40,6 @@ class GetArgsForLiftCommand
                 $text = preg_replace($regex->reps, '', $text);
             }
 
-            //we actually want to pull the reps out first to keep from matching the X
-            $movementName = preg_replace('/^ *([- a-zA-Z_]+)([-a-zA-Z_]+).*/', '$1$2' , $text);
-            
-            //Drop movement name from the start of the command
-            $text = preg_replace('/^[^\d]*/', '' , $text);
-
             //get weights
 
             preg_match_all($regex->weight,$text,$matches);
@@ -72,7 +66,15 @@ class GetArgsForLiftCommand
             }
 
             //drop weights
-            //$text = preg_replace($regex->weight, '', $text);
+            $text = preg_replace($regex->weight, '', $text);
+
+
+
+            //finally pull the movement name out
+            $movementName = preg_replace('/^ *([- a-zA-Z_]+)([-a-zA-Z_]+).*/', '$1$2' , $text);
+            
+            //Drop movement name from the start of the command
+            $text = preg_replace('/^[^\d]*/', '' , $text);
 
             //get URL
             preg_match($regex->url, $text, $matches);
@@ -97,12 +99,19 @@ class GetArgsForLiftCommand
         return $next($request);
     }
 
-    protected function isValid($input = []){
+    protected function isValid(&$input = []){
+        $input['movementName'] = trim($input['movementName']);
+        if(empty($input['movementName'])){
+            unset($input['movementName']);
+        }
         return isset(
             $input['movementName'],
             $input['reps'],
             $input['grams']
-        );
+        ) &&
+        is_numeric($input['reps'])     && 
+        is_numeric($input['grams'])
+        ;
     }
 
     protected function toGrams($magnitude = 0, $units = '', $fallBackUnits = 'l'){
