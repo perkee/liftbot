@@ -39,6 +39,7 @@ class Kernel extends HttpKernel
             \App\Http\Middleware\SlackTeamUser::class,
             \App\Http\Middleware\GetCommandFromSlack::class,
             \App\Http\Middleware\GetArgsForLiftCommand::class,
+            \App\Http\Middleware\GetArgsForPrsCommand::class
             //\App\Http\Middleware\RouteFromSlackText::class,
         ]
     ];

@@ -24,6 +24,8 @@ class Slack extends Controller
         if($command = $request->input('command')){
             $response['command'] = $command;
             switch ($command) {
+                case 'prs':
+                    return $this->handlePrs($request);
                 case 'sex':
                     if($sex = $request->input('args')){
                         $sex = mb_substr($sex, 0, 1);
@@ -69,5 +71,17 @@ class Slack extends Controller
         }
         return $response . PHP_EOL;
         
+    }
+
+    public function handlePrs($request){
+        $lifts = $request->input('lifts');
+        $slack_name = $request->input('slack_name');
+        if(!$lifts->isEmpty()){
+            $join = "\n\t";
+            return "PRs for ${slack_name}:${join}" . $lifts->implode($join);
+        }
+        else{
+            return "${slack_name} should get some PRs";
+        }
     }
 }
