@@ -21,10 +21,18 @@ class GetArgsForPrsCommand
             $text = $input['text'];
             //only argument should be a username
             $queried_slack_name = preg_replace('/\s*@?\s*([-_a-zA-Z\d]+)/', '$1', $text);
-            try {
-                $queried_user = \App\User::where('slack_name',$queried_slack_name)->firstOrFail();
-            } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
-                die("$queried_slack_name doesn't even lift here");
+            $queried_user = null;
+            if('' == $queried_slack_name){
+                //if no name, then give PRs for this user
+                $queried_user = $request->user;
+
+            }
+            else{
+                try {
+                    $queried_user = \App\User::where('slack_name',$queried_slack_name)->firstOrFail();
+                } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+                    die("$queried_slack_name doesn't even lift here");
+                }
             }
             $units = $request->user->units;
             $seen = [];//movement_id of prs we have seen already.
@@ -37,7 +45,7 @@ class GetArgsForPrsCommand
                 $lift->units = $units;
                 return $lift->__toString();
             });
-            $input['slack_name'] = $queried_slack_name;
+            $input['slack_name'] = $queried_user->slack_name;
             $input['user'] = $queried_user;
             $input['lifts'] = $lifts;
             $request->replace($input);

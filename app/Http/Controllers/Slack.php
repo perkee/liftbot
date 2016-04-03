@@ -37,6 +37,15 @@ class Slack extends Controller
                             $response['nice'] = "Sex for $user->slack_name is now $user->sex.";
                         }
                     }
+                    else{
+                        //no sex argument present so just return current value
+                        if($sex = $user->sex){
+                            $response['nice'] = "Sex for $user->slack_name is $sex";
+                        }
+                        else{
+                            $response['nice'] = "$user->slack_name has no sex";
+                        }
+                    }
                     break;
                 
                 case 'lift':
@@ -75,7 +84,11 @@ class Slack extends Controller
                 return json_encode($response,JSON_PRETTY_PRINT); 
             }
             else{
-                return $response['nice'];
+                if(isset($response['nice'])){
+                    return $response['nice'];
+                }
+                else
+                    return 'I have no words';
             }
         }
         return $response . PHP_EOL;
