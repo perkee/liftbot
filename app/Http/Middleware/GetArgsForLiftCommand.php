@@ -28,7 +28,7 @@ class GetArgsForLiftCommand
             //patterns we need to use twice to get values then remove from input
             $regex = (object)[
                 'reps'   => '/[x*]\s*\d+/i',
-                'weight' => '/(?<![\w.\/])\s*(@?)\s*(\d+)\s*(kg?|lb?|#)?\s*/',
+                'weight' => '/(?<![\w.\/])\s*(@?)\s*(\d+)\s*(kg?|lb?|#)?s?\s*/',
                 'url'    => '/https?:\/\/[-.a-zA-Z\/\d?=_]+/'
             ];
             //get number of reps
