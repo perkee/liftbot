@@ -67,8 +67,6 @@ class GetArgsForLiftCommand
             //drop weights
             $text = preg_replace($regex->weight, '', $text);
 
-
-
             //finally pull the movement name out
             $movementName = preg_replace('/^ *([- a-zA-Z_]+)([-a-zA-Z_]+).*/', '$1$2' , $text);
             
