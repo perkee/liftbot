@@ -67,18 +67,18 @@ class GetArgsForLiftCommand
             //drop weights
             $text = preg_replace($regex->weight, '', $text);
 
-            //finally pull the movement name out
-            $movementName = preg_replace('/^ *([- a-zA-Z_]+)([-a-zA-Z_]+).*/', '$1$2' , $text);
-            
-            //Drop movement name from the start of the command
-            $text = preg_replace('/^[^\d]*/', '' , $text);
-
             //get URL
             preg_match($regex->url, $text, $matches);
             if(count($matches) > 0){
                 $input['url'] = $matches[0];
                 $text = preg_replace($regex->url,'', $text);
             }
+
+            //finally pull the movement name out
+            $movementName = preg_replace('/^ *([- a-zA-Z_]+)([-a-zA-Z_]+).*/', '$1$2' , $text);
+            
+            //Drop movement name from the start of the command
+            $text = preg_replace('/^[^\d]*/', '' , $text);
 
             $input['movementName'] = $movementName;
             $input['reps'] = $reps;

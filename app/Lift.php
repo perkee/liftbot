@@ -42,8 +42,9 @@ class Lift extends Model
         $grams = $this->convert($this->grams, $units);
         $name = $this->movement->name;
         $reps = "× $this->reps";
-        $bodygrams = isset($this->bodygrams) ? '@ ' . $this->convert($this->bodygrams, $units) : '';
-        return "$name: $grams $reps $bodygrams";
+        $bodygrams = isset($this->bodygrams) ? ' @ ' . $this->convert($this->bodygrams, $units) : '';
+        $url = isset($this->url) ? " $this->url" : '';
+        return "$name: $grams ${reps}${bodygrams}${url}";
     }
 
     public function convert($grams, $units = '', $fallBackUnits = 'l')
