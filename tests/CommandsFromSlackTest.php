@@ -25,13 +25,14 @@ class CommandsFromSlackTest extends TestCase
         $texts = [ //text from before $mw => text after mw
             'lift front squat 123lbx12@111 http://perk.ee/lift-test/'
                 => 'front squat 123lbx12@111 http://perk.ee/lift-test/',
-            'lift'
-                => ''
+            'lift' => '',
+            ' lift ' => '',
+            ' lift'  => '',
+            'LIFT '  => ''
         ];
         foreach ($texts as $before => $after) {
             $request = $this->requestWithText($before);
             $mw = new \App\Http\Middleware\GetCommandFromSlack;
-            echo "testing '$before'\n => '$after'\n";
             $mw->handle($request,function($r) use ($after){
                 $this->assertEquals('lift',$r->input('command'));
                 $this->assertEquals($after,$r->input('text'));

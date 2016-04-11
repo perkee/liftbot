@@ -22,7 +22,7 @@ class GetCommandFromSlack
             $text = explode(' ',$text,2);
             $count = count($text);
             if($count > 0){
-                $input['command'] = $text[0];
+                $input['command'] = strtolower($text[0]);
                 if($count > 1){
                     $input['text'] = ltrim($text[1]); //already trimmed right side
                 }
