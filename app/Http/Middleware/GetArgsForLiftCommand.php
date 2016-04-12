@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use \Illuminate\Http\Request;
 use Closure;
 use Log;
 
@@ -89,7 +90,7 @@ class GetArgsForLiftCommand
             else{
                 $keys = array_keys($input);
                 $keys = implode(', ', $keys);
-                die ("Invalid lift command, you provided these so what's missing?\n$keys");
+                throw new \Exception("Invalid lift command, you provided these so what's missing?\n$keys", 1);
             }
 
         }
@@ -128,7 +129,7 @@ class GetArgsForLiftCommand
     }
 
 
-    private function isBodyWeight(String $weightString){
+    private function isBodyWeight($weightString){
         return 0 === strncmp($weightString, '@', 1);
     }
 

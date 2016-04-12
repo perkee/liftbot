@@ -22,4 +22,27 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase
 
         return $app;
     }
+    
+    /**
+     * Given an array, return a request with that array as input
+     *
+     * @param string $text value of text field in request
+     * @return Illuminate\Http\Request Reequest object with minumum field required for middleware
+     */
+    protected function requestWithInput($input = []){
+        $request = new Illuminate\Http\Request();
+        $request->replace($input);
+        return $request;
+    }
+    /**
+     * Given a string, return a request with that string in the text field
+     *
+     * @param string $text value of text field in request
+     * @return Illuminate\Http\Request Reequest object with minumum field required for middleware
+     */
+    protected function requestWithText($text = ''){
+        return $this->requestWithInput([
+            'text' => $text
+        ]);
+    }
 }

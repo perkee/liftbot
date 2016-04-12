@@ -1,26 +1,9 @@
 <?php
 
-//use Illuminate\Foundation\Testing\WithoutMiddleware;
-//use Illuminate\Foundation\Testing\DatabaseMigrations;
-//use Illuminate\Foundation\Testing\DatabaseTransactions;
 use App\Http\Middleware\GetCommandFromSlack;
-use Illuminate\Http\Request;
 
 class CommandsFromSlackTest extends TestCase
 {
-    /**
-     * Given a string, return a request with that string in the text field
-     *
-     * @param string $text value of text field in request
-     * @return Illuminate\Http\Request Reequest object with minumum field required for middleware
-     */
-    private function requestWithText($text = ''){
-        $request = new Illuminate\Http\Request();
-        $request->replace([
-            'text' => $text
-        ]);
-        return $request;
-    }
     /**
      * Test that the lift command is set correctly for typical lift commands.
      *
