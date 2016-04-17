@@ -33,7 +33,7 @@ class ArgsForLiftTest extends TestCase
 
     public function testShouldExceptOnWhitespaceText()
     {
-        $this->setExpectedException('Exception');
+        $this->setExpectedException(\Exception::class);
         $mw = new \App\Http\Middleware\GetArgsForLiftCommand;
         $mw->handle($this->requestWithInput(['command'=>'lift','text' => '   ']),function($request){
             $this->fail('Should not reach this callback' . json_encode(['r'=>$request,'i'=>$request->all()],JSON_PRETTY_PRINT));
@@ -41,23 +41,45 @@ class ArgsForLiftTest extends TestCase
     }
 
     /**
-     * Should die when there are not enough args
+     * Should die when there is no weight for lift
      * 
      * @return void
      */
-    public function shouldExceptOnInsufficientText()
+    public function testShouldExceptWithoutWeight()
+    
     {
+        $text = 'front squat x12 @ 111kg http://perk.ee/lift-test/';// no lift weight
 
-        $texts = [ //text from before $mw => reps after parsing from text
-            'front squat x12 @ 111kg http://perk.ee/lift-test/',
-            'x15 145kg @111lbhttps://www.instagram.com/p/BD0daiMvI1w/?taken-by=perk.ee',
-        ];
-        foreach ($texts as $text => $args) {
-            $mw = new \App\Http\Middleware\GetArgsForLiftCommand;
-            $mw->text = $text;
-            $this->assertEquals($args['reps'],$mw->getReps($mw->text));
-            $this->assertEquals($args['text'],$mw->text);
-        }
+        $this->setExpectedException(\Exception::class);
+        $request = $this->requestWithInput([
+           'text' => $text,
+           'command' => 'lift'
+        ]);
+        $mw = new \App\Http\Middleware\GetArgsForLiftCommand;
+        $mw->handle($request,function($request){
+            $that->fail('Should not reach this callback' . json_encode(['r'=>$request,'i'=>$request->all()],JSON_PRETTY_PRINT));
+        });
+    }
+
+    /**
+     * Should die when there is no movement name for lift
+     * 
+     * @return void
+     */
+    public function testShouldExceptWithoutMovementName()
+    
+    {
+        $text = 'x15 145kg @111lbhttps://www.instagram.com/p/BD0daiMvI1w/?taken-by=perk.ee'; //no movement name
+
+        $this->setExpectedException(\Exception::class);
+        $request = $this->requestWithInput([
+           'text' => $text,
+           'command' => 'lift'
+        ]);
+        $mw = new \App\Http\Middleware\GetArgsForLiftCommand;
+        $mw->handle($request,function($request){
+            $that->fail('Should not reach this callback' . json_encode(['r'=>$request,'i'=>$request->all()],JSON_PRETTY_PRINT));
+        });
     }
 
     /**
