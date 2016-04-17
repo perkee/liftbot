@@ -22,9 +22,9 @@ class CommandsFromSlackTest extends TestCase
         foreach ($texts as $before => $after) {
             $request = $this->requestWithText($before);
             $mw = new \App\Http\Middleware\GetCommandFromSlack;
-            $mw->handle($request,function($r) use ($after){
-                $this->assertEquals('lift',$r->input('command'));
-                $this->assertEquals($after,$r->input('text'));
+            $mw->handle($request, function ($r) use ($after) {
+                $this->assertEquals('lift', $r->input('command'));
+                $this->assertEquals($after, $r->input('text'));
             });
         }
     }
@@ -47,11 +47,10 @@ class CommandsFromSlackTest extends TestCase
         foreach ($texts as $before => $after) {
             $request = $this->requestWithText($before);
             $mw = new \App\Http\Middleware\GetCommandFromSlack;
-            $mw->handle($request,function($r) use ($after){
-                $this->assertEquals('prs',$r->input('command'));
-                $this->assertEquals($after,$r->input('text'));
+            $mw->handle($request, function ($r) use ($after) {
+                $this->assertEquals('prs', $r->input('command'));
+                $this->assertEquals($after, $r->input('text'));
             });
         }
     }
 }
-
