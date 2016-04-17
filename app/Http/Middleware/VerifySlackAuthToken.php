@@ -27,11 +27,10 @@ class VerifySlackAuthToken
      */
     public function handle($request, Closure $next)
     {
-        if(
-            $this->isReading($request) ||
+        if ($this->isReading($request) ||
             $this->runningUnitTests()  ||
-            $this->tokensMatch($request) 
-        ){
+            $this->tokensMatch($request)
+        ) {
             return $next($request);
         }
         throw new TokenMismatchException;
@@ -68,7 +67,7 @@ class VerifySlackAuthToken
     {
         $knownToken = $_ENV['SLACK_TOKEN'];
 
-        if($token = $request->input('token')) {
+        if ($token = $request->input('token')) {
             return $knownToken === $token;
         }
 

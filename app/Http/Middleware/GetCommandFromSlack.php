@@ -17,16 +17,15 @@ class GetCommandFromSlack
     public function handle(\Illuminate\Http\Request $request, Closure $next)
     {
         $input = $request->all();
-        if( isset($input['text']) && $text = $input['text']){
+        if (isset($input['text']) && $text = $input['text']) {
             $text = trim($text);
-            $text = explode(' ',$text,2);
+            $text = explode(' ', $text, 2);
             $count = count($text);
-            if($count > 0){
+            if ($count > 0) {
                 $input['command'] = strtolower($text[0]);
-                if($count > 1){
+                if ($count > 1) {
                     $input['text'] = ltrim($text[1]); //already trimmed right side
-                }
-                else{
+                } else {
                     $input['text'] = '';
                 }
             }

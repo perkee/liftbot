@@ -21,7 +21,7 @@ class User extends Authenticatable
 
     public function __construct(array $attributes = [])
     {
-        if(!isset($attributes['units']) || 0 == strlen($attributes['units'])){
+        if (!isset($attributes['units']) || 0 == strlen($attributes['units'])) {
             //dfault units for a user are pounds
             $attributes['units'] = 'l';
         }

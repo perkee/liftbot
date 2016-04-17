@@ -11,16 +11,16 @@
 |
 */
 
-call_user_func(function(){
+call_user_func(function () {
 
-	$apiBase = 'api/v1';
+    $apiBase = 'api/v1';
 
-	Route::get('', function(){
-		return 'web interface coming soon!';
-	});
+    Route::get('', function () {
+        return 'web interface coming soon!';
+    });
 
-	Route::group(['middleware' => 'slack'],function() use ($apiBase){
-		Route::post("$apiBase/slack",'Slack@handle');
-	});
+    Route::group(['middleware' => 'slack'], function () use ($apiBase) {
+        Route::post("$apiBase/slack", 'Slack@handle');
+    });
 
 });

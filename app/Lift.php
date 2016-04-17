@@ -62,16 +62,19 @@ class Lift extends Model
         }
     }
 
-    private function floatToString($float){
-        return sprintf('%.1f',$float);
+    private function floatToString($float)
+    {
+        return sprintf('%.1f', $float);
     }
 
 
-    public function kg($grams){
+    public function kg($grams)
+    {
         return $this->floatToString($grams / 1000);
     }
 
-    public function lb($grams){
+    public function lb($grams)
+    {
         return $this->floatToString($grams / 453.593);
     }
 }

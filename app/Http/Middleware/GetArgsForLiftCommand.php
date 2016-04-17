@@ -44,17 +44,16 @@ class GetArgsForLiftCommand
             // 1 => BW flag group: - string matching @ or blank
             // 2 => magnitude group: string comprised of digits
             // 3 => units group indicating kg or lb
-            if(4 >= count($matches) ){
+            if (4 >= count($matches)) {
                 $input['weights'] = $matches;
                 $bw = $matches[1];
                 $magnitudes = $matches[2];
                 $units = $matches[3];
                 foreach ($magnitudes as $idx => $magnitude) {
-                    $grams = $this->toGrams($magnitude,$units[$idx],$request->user->units);
-                    if($this->isBodyWeight($bw[$idx])){
+                    $grams = $this->toGrams($magnitude, $units[$idx], $request->user->units);
+                    if ($this->isBodyWeight($bw[$idx])) {
                         $input['bodyGrams'] = $grams;
-                    }
-                    else{
+                    } else {
                         $input['grams'] = $grams;
                     }
                 }
@@ -81,12 +80,12 @@ class GetArgsForLiftCommand
             $input['text'] = $this->text;
             if ($this->isValid($input)) {
                 $request->replace($input);
-            }
-            else{
+            } else {
                 $keys = array_keys($input);
                 $keys = implode(', ', $keys);
                 throw new \Exception("Invalid lift command, you provided these so what's missing?\n$keys", 1);
             }
+        } else {
 
         }
         return $next($request);
@@ -153,7 +152,7 @@ class GetArgsForLiftCommand
     protected function isValid(&$input = [])
     {
         $input['movementName'] = trim($input['movementName']);
-        if(empty($input['movementName'])){
+        if (empty($input['movementName'])) {
             unset($input['movementName']);
         }
         return isset(
@@ -167,7 +166,8 @@ class GetArgsForLiftCommand
         ;
     }
 
-    protected function toGrams($magnitude = 0, $units = '', $fallBackUnits = 'l'){
+    protected function toGrams($magnitude = 0, $units = '', $fallBackUnits = 'l')
+    {
         $units .= $fallBackUnits;
         switch (substr($units, 0, 1)) {
             case 'l': //intentional fallthrough for synonyms
@@ -184,15 +184,18 @@ class GetArgsForLiftCommand
     }
 
 
-    private function isBodyWeight($weightString){
+    private function isBodyWeight($weightString)
+    {
         return 0 === strncmp($weightString, '@', 1);
     }
 
-    private function kgToGrams($kg){
+    private function kgToGrams($kg)
+    {
         return 1000 * $kg;
     }
 
-    private function lbToGrams($lb){
+    private function lbToGrams($lb)
+    {
         return $lb * 453.593;
     }
 }
