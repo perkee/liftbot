@@ -40,6 +40,13 @@ class ArgsForLiftTest extends TestCase
         });
     }
 
+    /*
+    
+    I would prefer both exception tests without sufficient args in one method
+    But exceptions require a test* method for each one
+
+     */
+
     /**
      * Should die when there is no weight for lift
      *
