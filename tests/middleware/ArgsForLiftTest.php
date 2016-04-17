@@ -27,7 +27,11 @@ class ArgsForLiftTest extends TestCase
         $this->setExpectedException('Exception');
         $mw = new \App\Http\Middleware\GetArgsForLiftCommand;
         $mw->handle($this->requestWithInput(['command'=>'lift']), function ($request) {
-            $this->fail('Should not reach this callback' . json_encode(['r'=>$request,'i'=>$request->all()], JSON_PRETTY_PRINT));
+            $debug = json_encode([
+                'r'=>$request,
+                'i'=>$request->all()
+            ], JSON_PRETTY_PRINT);
+            $this->fail("Should not reach this callback $debug");
         });
     }
 
@@ -36,7 +40,11 @@ class ArgsForLiftTest extends TestCase
         $this->setExpectedException(\Exception::class);
         $mw = new \App\Http\Middleware\GetArgsForLiftCommand;
         $mw->handle($this->requestWithInput(['command'=>'lift','text' => '   ']), function ($request) {
-            $this->fail('Should not reach this callback' . json_encode(['r'=>$request,'i'=>$request->all()], JSON_PRETTY_PRINT));
+            $debug = json_encode([
+                'r'=>$request,
+                'i'=>$request->all()
+            ], JSON_PRETTY_PRINT);
+            $this->fail("Should not reach this callback $debug");
         });
     }
 
@@ -63,7 +71,11 @@ class ArgsForLiftTest extends TestCase
         ]);
         $mw = new \App\Http\Middleware\GetArgsForLiftCommand;
         $mw->handle($request, function ($request) {
-            $that->fail('Should not reach this callback' . json_encode(['r'=>$request,'i'=>$request->all()], JSON_PRETTY_PRINT));
+            $debug = json_encode([
+                'r'=>$request,
+                'i'=>$request->all()
+            ], JSON_PRETTY_PRINT);
+            $this->fail("Should not reach this callback $debug");
         });
     }
 
@@ -83,7 +95,11 @@ class ArgsForLiftTest extends TestCase
         ]);
         $mw = new \App\Http\Middleware\GetArgsForLiftCommand;
         $mw->handle($request, function ($request) {
-            $that->fail('Should not reach this callback' . json_encode(['r'=>$request,'i'=>$request->all()], JSON_PRETTY_PRINT));
+            $debug = json_encode([
+                'r'=>$request,
+                'i'=>$request->all()
+            ], JSON_PRETTY_PRINT);
+            $this->fail("Should not reach this callback $debug");
         });
     }
 
