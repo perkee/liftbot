@@ -9,6 +9,12 @@ use Log;
 class GetArgsForLiftCommand
 {
     /**
+     * text from request input containing all params for lift command
+     * We chip away at it as we parse the text.
+     * @var string
+     */
+    public $text;
+    /**
      * Handle an incoming request.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -17,32 +23,21 @@ class GetArgsForLiftCommand
      */
     public function handle($request, Closure $next)
     {
-        $input = $request->all();
-        if(isset($input['text']) && isset($input['command']) && 'lift' == $input['command']){
-            $text = $input['text'];
-            if(!$text){
-                die('Lift needs a movement and weight at least');
-            }
-            //full string looks like /perk lift <movement name> <Weight>
+        if ($input = $this->liftRequestInput($request)) {
+
             //reusable array for running preg_match
             $matches = [];
             //patterns we need to use twice to get values then remove from input
             $regex = (object)[
-                'reps'   => '/[x*]\s*\d+/i',
                 'weight' => '/(?<![\w.\/])\s*(@?)\s*(\d+)\s*(kg?|lb?|#)?s?\s*/',
                 'url'    => '/https?:\/\/[-.a-zA-Z\/\d?=_]+/'
             ];
             //get number of reps
-            $reps = 1;
-            preg_match($regex->reps,$text,$matches);
-            if(isset($matches[0])){
-                $reps = + substr($matches[0],1);
-                $text = preg_replace($regex->reps, '', $text);
-            }
+            $reps = $this->getReps($this->text);
 
             //get weights
 
-            preg_match_all($regex->weight,$text,$matches);
+            preg_match_all($regex->weight, $this->text, $matches);
 
             //matches has four arrays: first is full matches, others match groups:
             // 0 => array for full matches
@@ -66,25 +61,25 @@ class GetArgsForLiftCommand
             }
 
             //drop weights
-            $text = preg_replace($regex->weight, '', $text);
+            $this->text = preg_replace($regex->weight, '', $this->text);
 
             //get URL
-            preg_match($regex->url, $text, $matches);
-            if(count($matches) > 0){
+            preg_match($regex->url, $this->text, $matches);
+            if (count($matches) > 0) {
                 $input['url'] = $matches[0];
-                $text = preg_replace($regex->url,'', $text);
+                $this->text = preg_replace($regex->url, '', $this->text);
             }
 
             //finally pull the movement name out
-            $movementName = preg_replace('/^ *([- a-zA-Z_]+)([-a-zA-Z_]+).*/', '$1$2' , $text);
+            $movementName = preg_replace('/^ *([- a-zA-Z_]+)([-a-zA-Z_]+).*/', '$1$2', $this->text);
             
             //Drop movement name from the start of the command
-            $text = preg_replace('/^[^\d]*/', '' , $text);
+            $this->text = preg_replace('/^[^\d]*/', '', $this->text);
 
             $input['movementName'] = $movementName;
             $input['reps'] = $reps;
-            $input['text'] = $text;
-            if($this->isValid($input)){
+            $input['text'] = $this->text;
+            if ($this->isValid($input)) {
                 $request->replace($input);
             }
             else{
@@ -97,6 +92,28 @@ class GetArgsForLiftCommand
         return $next($request);
     }
 
+    /**
+     * Given a string command, return the nubmer of reps in the string
+     * and remove the reps from the input string
+     *
+     * @param  string $text command string from Slack
+     * @return int number of reps
+     */
+    public function getReps(&$text)
+    {
+        //reusable array for running preg_match
+        $matches = [];
+        //patterns we need to use twice to get values then remove from input
+        $regex = '/[x*]\s*\d+/i';
+        //get number of reps
+        $reps = 1;
+        preg_match($regex, $text, $matches);
+        if (isset($matches[0])) {
+            $reps = + substr($matches[0], 1);
+            $text = preg_replace($regex, '', $text);
+        }
+        return $reps;
+    }
 
     /**
      * returns array of input data from request only if request is valid,
@@ -106,14 +123,27 @@ class GetArgsForLiftCommand
      */
     public function liftRequestInput(\Illuminate\Http\Request $request)
     {
-        if ($request->has('text') &&
-            $request->has('command') &&
-            'lift' === $request->input('command')
-        ) {
-            return $request->all();
-        } else {
-            return false;
+        $return = false;
+        if($request->has('command')){
+            if('lift' === $request->input('command')){
+                if ($request->has('text')){
+                    //this might be a good command
+                    //but we should furthermore see if the text is somewhat worthwhile
+                    //and as a side effect set this object's instance copy of it
+                    $input = $request->all();
+                    $this->text = trim($input['text']);
+                    if (!$this->text) {
+                        throw new \Exception("Lift needs a movement and weight at least, got '$this->text'");
+                    }
+                    $return = $input;
+                }
+                else{
+                    throw new \Exception('Lift command requires a movement and weight at least, got no arguments.');
+                }
+            }
         }
+        //else: this is not a lift command so we pass it by.
+        return $return;
     }
 
     /**
