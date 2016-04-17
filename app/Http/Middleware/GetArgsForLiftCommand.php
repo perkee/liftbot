@@ -97,7 +97,31 @@ class GetArgsForLiftCommand
         return $next($request);
     }
 
-    protected function isValid(&$input = []){
+
+    /**
+     * returns array of input data from request only if request is valid,
+     * otherwise returns false;
+     * @param  \Illuminate\Http\Request
+     * @return mixed input array if valid, false if not
+     */
+    public function liftRequestInput(\Illuminate\Http\Request $request)
+    {
+        if ($request->has('text') &&
+            $request->has('command') &&
+            'lift' === $request->input('command')
+        ) {
+            return $request->all();
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * @param  array $input input from $request->all() modified to include fields for lift command
+     * @return boolean whether or not minimum required fields are set in input
+     */
+    protected function isValid(&$input = [])
+    {
         $input['movementName'] = trim($input['movementName']);
         if(empty($input['movementName'])){
             unset($input['movementName']);
