@@ -161,7 +161,8 @@ class GetArgsForLiftCommand
             $input['reps'],
             $input['grams']
         ) &&
-        is_numeric($input['reps'])     && 
+        is_string($input['movementName']) &&
+        is_numeric($input['reps'])     &&
         is_numeric($input['grams'])
         ;
     }
