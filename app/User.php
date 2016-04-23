@@ -37,4 +37,32 @@ class User extends Authenticatable
     {
         return $this->hasMany('App\Lift');
     }
+
+    /**
+     * Gets the user's rep maxes.
+     * @return Collection of \App\Lift
+     */
+    public function maxLifts()
+    {
+        $seen = [];//keys are movement ids, values are arrays of reps
+        return $this->lifts()
+        ->orderBy('grams', 'desc')
+        ->get()
+        ->reject(function ($lift) use (&$seen) {
+            $return = false;//meaning keep this lift
+            $movement_id = $lift->movement_id;
+            $reps = $lift->reps;
+            if (isset($seen[$movement_id])) {
+                if (isset($seen[$movement_id][$reps])) {
+                    $return = true;
+                } else {
+                    $seen[$movement_id][$reps] = true;
+                }
+            } else {
+                $seen[$movement_id] = [$reps => true];
+            }
+            return $return;
+
+        });
+    }
 }

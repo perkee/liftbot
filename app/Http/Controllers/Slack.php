@@ -99,6 +99,11 @@ class Slack extends Controller
         $lifts = $request->input('lifts');
         $slack_name = $request->input('slack_name');
         if (!$lifts->isEmpty()) {
+            $units = $request->user->units;
+            $lifts = $lifts->map(function ($lift) use ($units) {
+                $lift->units = $units;
+                return $lift->__toString();
+            });
             $join = "\n\t";
             return "PRs for ${slack_name}:${join}" . $lifts->implode($join);
         } else {
