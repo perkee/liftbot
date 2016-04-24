@@ -20,6 +20,20 @@ class Lift extends Model
         'url'
     ];
 
+    public $units; //Will not persist.
+
+
+
+    public function __construct(array $attributes = [])
+    {
+        if (!isset($attributes['reps']) || !is_numeric($attributes['reps'])) {
+            //default reps is 1
+            $attributes['reps'] = 1;
+        }
+        $units = 'l';
+        parent::__construct($attributes);
+    }
+
     /**
      * Get the user who performed this lift
      */
